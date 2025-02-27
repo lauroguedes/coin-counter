@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type Coin } from '../composables/useCurrency';
 import { computed } from 'vue';
+import CoinValueDisplay from './CoinValueDisplay.vue';
 
 const props = defineProps<{
   coin: Coin;
@@ -25,6 +26,10 @@ const coinColor = computed(() => {
 
   return currencyColorMap[props.currencyCode] || 'bg-primary hover:bg-primary-focus';
 });
+
+const formattedValue = computed(() => {
+  return props.formatCurrency(props.coin.value * props.coin.count);
+});
 </script>
 
 <template>
@@ -48,22 +53,13 @@ const coinColor = computed(() => {
         />
         <button class="btn join-item" @click="emit('increment', coin)">+</button>
       </div>
-      <div class="flex items-center gap-2">
-        <button 
-          v-if="coin.count > 0" 
-          class="btn btn-circle btn-xs btn-error" 
-          @click="emit('reset', coin)" 
-          title="Reset this coin"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        <div v-if="coin.count > 0" class="badge badge-lg badge-success gap-2 text-lg p-4 overflow-hidden">
-          <span class="font-mono">{{ formatCurrency(coin.value * coin.count) }}</span>
-        </div>
-        <div v-else class="w-20"></div>
-      </div>
+      <CoinValueDisplay
+        v-if="coin.count > 0"
+        :value="formattedValue"
+        :showReset="true"
+        @reset="emit('reset', coin)"
+      />
+      <div v-else class="w-20"></div>
     </div>
   </div>
 </template> 
