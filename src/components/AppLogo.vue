@@ -4,7 +4,7 @@
 
 <template>
   <div class="flex justify-center mb-4">
-    <div class="w-16 h-16 text-primary">
+    <div class="w-16 h-16 text-base-content">
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
         viewBox="0 0 24 24" 

@@ -35,6 +35,7 @@ const formattedValue = computed(() => {
 <template>
   <div class="card bg-base-100 shadow-sm hover:shadow-md transition-shadow duration-200">
     <div class="card-body p-4">
+      <!-- Main Controls Row -->
       <div class="flex items-center gap-4">
         <!-- Coin Circle -->
         <div 
@@ -69,16 +70,16 @@ const formattedValue = computed(() => {
             +
           </button>
         </div>
+      </div>
 
-        <!-- Value Display -->
-        <div class="shrink-0">
-          <CoinValueDisplay
-            v-if="coin.count > 0"
-            :value="formattedValue"
-            :showReset="true"
-            @reset="emit('reset', coin)"
-          />
-        </div>
+      <!-- Value Display Row -->
+      <div class="flex justify-end mt-2">
+        <CoinValueDisplay
+          v-if="coin.count > 0"
+          :value="formattedValue"
+          :showReset="true"
+          @reset="emit('reset', coin)"
+        />
       </div>
     </div>
   </div>
