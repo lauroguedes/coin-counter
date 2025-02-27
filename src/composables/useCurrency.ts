@@ -11,6 +11,7 @@ export interface CurrencyConfig {
   code: string;
   symbol: string;
   name: string;
+  flag: string;
   coins: Coin[];
 }
 
@@ -19,6 +20,7 @@ export const currencies: CurrencyConfig[] = [
     code: 'EUR',
     symbol: '€',
     name: 'Euro',
+    flag: '🇪🇺',
     coins: [
       { value: 200, label: '€2', count: 0, displayValue: 0 },
       { value: 100, label: '€1', count: 0, displayValue: 0 },
@@ -34,6 +36,7 @@ export const currencies: CurrencyConfig[] = [
     code: 'USD',
     symbol: '$',
     name: 'US Dollar',
+    flag: '🇺🇸',
     coins: [
       { value: 100, label: '$1', count: 0, displayValue: 0 },
       { value: 50, label: '50¢', count: 0, displayValue: 0 },
@@ -47,6 +50,7 @@ export const currencies: CurrencyConfig[] = [
     code: 'GBP',
     symbol: '£',
     name: 'British Pound',
+    flag: '🇬🇧',
     coins: [
       { value: 200, label: '£2', count: 0, displayValue: 0 },
       { value: 100, label: '£1', count: 0, displayValue: 0 },
@@ -62,6 +66,7 @@ export const currencies: CurrencyConfig[] = [
     code: 'BRL',
     symbol: 'R$',
     name: 'Brazilian Real',
+    flag: '🇧🇷',
     coins: [
       { value: 100, label: 'R$1', count: 0, displayValue: 0 },
       { value: 50, label: '50c', count: 0, displayValue: 0 },

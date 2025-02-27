@@ -17,6 +17,7 @@ defineProps<{
       :class="{ 'btn-active': selectedCurrency.code === currency.code }"
       @click="onCurrencyChange(currency)"
     >
+      <span class="mr-2 text-lg">{{ currency.flag }}</span>
       {{ currency.name }}
     </button>
   </div>
