@@ -56,6 +56,7 @@ const resetCoin = (coin: Coin) => {
             v-for="(coin, index) in coins"
             :key="coin.label"
             :coin="coin"
+            :currencyCode="selectedCurrency.code"
             :formatCurrency="formatCurrency"
             :style="{ transitionDelay: `${index * 50}ms` }"
             @increment="increment"
