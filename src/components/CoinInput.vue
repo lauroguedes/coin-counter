@@ -33,33 +33,70 @@ const formattedValue = computed(() => {
 </script>
 
 <template>
-  <div class="flex items-center p-2 border rounded-lg hover:shadow-md transition-shadow duration-200">
-    <div 
-      :class="[
-        'w-16 h-16 flex items-center justify-center text-white rounded-full mr-4 transition-colors duration-200',
-        coinColor
-      ]"
-    >
-      <span class="text-xl font-bold">{{ coin.label }}</span>
-    </div>
-    <div class="flex-1 flex items-center justify-between">
-      <div class="join">
-        <button class="btn join-item" @click="emit('decrement', coin)">-</button>
-        <input 
-          type="number" 
-          v-model="coin.count" 
-          min="0" 
-          class="input input-bordered join-item w-20 text-center"
-        />
-        <button class="btn join-item" @click="emit('increment', coin)">+</button>
+  <div class="card bg-base-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div class="card-body p-4">
+      <div class="flex items-center gap-4">
+        <!-- Coin Circle -->
+        <div 
+          :class="[
+            'w-12 h-12 flex items-center justify-center text-white rounded-full transition-colors duration-200 shrink-0',
+            coinColor
+          ]"
+        >
+          <span class="text-lg font-bold">{{ coin.label }}</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="join flex-1">
+          <button 
+            class="btn join-item" 
+            @click="emit('decrement', coin)"
+          >
+            -
+          </button>
+          <input 
+            type="number" 
+            v-model="coin.count" 
+            min="0" 
+            inputmode="numeric"
+            pattern="[0-9]*"
+            class="input input-bordered join-item w-20 text-center text-lg"
+          />
+          <button 
+            class="btn join-item" 
+            @click="emit('increment', coin)"
+          >
+            +
+          </button>
+        </div>
+
+        <!-- Value Display -->
+        <div class="shrink-0">
+          <CoinValueDisplay
+            v-if="coin.count > 0"
+            :value="formattedValue"
+            :showReset="true"
+            @reset="emit('reset', coin)"
+          />
+        </div>
       </div>
-      <CoinValueDisplay
-        v-if="coin.count > 0"
-        :value="formattedValue"
-        :showReset="true"
-        @reset="emit('reset', coin)"
-      />
-      <div v-else class="w-20"></div>
     </div>
   </div>
-</template> 
+</template>
+
+<style scoped>
+/* Prevent zoom on focus for iOS */
+input[type="number"] {
+  font-size: 16px;
+}
+
+/* Hide number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+</style> 

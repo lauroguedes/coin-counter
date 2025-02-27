@@ -32,16 +32,23 @@ watch(() => props.totalValue, (newValue, oldValue) => {
 </script>
 
 <template>
-  <div class="stats shadow bg-base-200">
-    <div class="stat px-4 py-3">
-      <div class="flex flex-col gap-1">
-        <div class="stat-title text-sm opacity-80">Total Value</div>
-        <CoinValueDisplay
-          :value="formatCurrency(totalValue)"
-          :showReset="totalValue > 0"
-          @reset="emit('reset')"
-        />
-        <div class="stat-desc font-mono text-sm">
+  <div class="card bg-base-200 shadow">
+    <div class="card-body p-4">
+      <div class="flex items-center justify-between">
+        <h3 class="card-title text-base">Total Value</h3>
+        <button 
+          v-if="totalValue > 0"
+          class="btn btn-sm btn-ghost"
+          @click="emit('reset')"
+        >
+          Reset All
+        </button>
+      </div>
+      <div class="mt-2">
+        <div class="text-2xl font-mono font-semibold">
+          {{ formatCurrency(totalValue) }}
+        </div>
+        <div class="text-sm font-mono opacity-70">
           {{ Math.round(totalDisplayValue) }} cents
         </div>
       </div>

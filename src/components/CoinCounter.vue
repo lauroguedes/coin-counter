@@ -31,54 +31,56 @@ const resetCoin = (coin: Coin) => {
 
 <template>
   <div class="container mx-auto p-4">
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body">
-        <Transition name="fade-slow" mode="out-in">
-          <div :key="selectedCurrency.code" class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-            <h2 class="card-title text-2xl font-bold text-center">
-              <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
-              {{ selectedCurrency.name }} Coin Counter
-            </h2>
-            <CurrencySelector
-              :currencies="currencies"
-              :selectedCurrency="selectedCurrency"
-              :onCurrencyChange="changeCurrency"
+    <div class="flex flex-col gap-6">
+      <!-- Header -->
+      <Transition name="fade-slow" mode="out-in">
+        <div :key="selectedCurrency.code" class="flex flex-col md:flex-row justify-between items-center gap-4">
+          <h2 class="text-2xl font-bold text-center md:text-left">
+            <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
+            {{ selectedCurrency.name }} Coin Counter
+          </h2>
+          <CurrencySelector
+            :currencies="currencies"
+            :selectedCurrency="selectedCurrency"
+            :onCurrencyChange="changeCurrency"
+          />
+        </div>
+      </Transition>
+
+      <!-- Main Content -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Coins Grid -->
+        <div class="lg:col-span-2">
+          <TransitionGroup 
+            name="fade-list" 
+            tag="div" 
+            class="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            <CoinInput
+              v-for="(coin, index) in coins"
+              :key="coin.label"
+              :coin="coin"
+              :currencyCode="selectedCurrency.code"
+              :formatCurrency="formatCurrency"
+              :style="{ transitionDelay: `${index * 50}ms` }"
+              @increment="increment"
+              @decrement="decrement"
+              @reset="resetCoin"
             />
-          </div>
-        </Transition>
-        
-        <div class="flex flex-col-reverse md:flex-row gap-6">
-          <div class="flex-1">
-            <TransitionGroup 
-              name="fade-list" 
-              tag="div" 
-              class="grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <CoinInput
-                v-for="(coin, index) in coins"
-                :key="coin.label"
-                :coin="coin"
-                :currencyCode="selectedCurrency.code"
+          </TransitionGroup>
+        </div>
+
+        <!-- Total Display -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-4">
+            <Transition name="fade-scale" mode="out-in">
+              <TotalDisplay
+                :key="selectedCurrency.code"
+                :totalValue="totalValue"
                 :formatCurrency="formatCurrency"
-                :style="{ transitionDelay: `${index * 50}ms` }"
-                @increment="increment"
-                @decrement="decrement"
-                @reset="resetCoin"
+                @reset="resetCounts"
               />
-            </TransitionGroup>
-          </div>
-          
-          <div class="md:w-64 flex-shrink-0">
-            <div class="sticky top-4">
-              <Transition name="fade-scale" mode="out-in">
-                <TotalDisplay
-                  :key="selectedCurrency.code"
-                  :totalValue="totalValue"
-                  :formatCurrency="formatCurrency"
-                  @reset="resetCounts"
-                />
-              </Transition>
-            </div>
+            </Transition>
           </div>
         </div>
       </div>
