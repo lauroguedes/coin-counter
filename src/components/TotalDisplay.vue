@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import gsap from 'gsap';
-import CoinValueDisplay from './CoinValueDisplay.vue';
 
 const props = defineProps<{
   totalValue: number;
