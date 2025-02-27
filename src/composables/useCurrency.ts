@@ -19,7 +19,7 @@ export const currencies: CurrencyConfig[] = [
   {
     code: 'EUR',
     symbol: '€',
-    name: 'Euro',
+    name: 'EUR',
     flag: '🇪🇺',
     coins: [
       { value: 200, label: '€2', count: 0, displayValue: 0 },
@@ -35,7 +35,7 @@ export const currencies: CurrencyConfig[] = [
   {
     code: 'USD',
     symbol: '$',
-    name: 'US Dollar',
+    name: 'USD',
     flag: '🇺🇸',
     coins: [
       { value: 100, label: '$1', count: 0, displayValue: 0 },
@@ -49,7 +49,7 @@ export const currencies: CurrencyConfig[] = [
   {
     code: 'GBP',
     symbol: '£',
-    name: 'British Pound',
+    name: 'GBP',
     flag: '🇬🇧',
     coins: [
       { value: 200, label: '£2', count: 0, displayValue: 0 },
@@ -65,7 +65,7 @@ export const currencies: CurrencyConfig[] = [
   {
     code: 'BRL',
     symbol: 'R$',
-    name: 'Brazilian Real',
+    name: 'BRL',
     flag: '🇧🇷',
     coins: [
       { value: 100, label: 'R$1', count: 0, displayValue: 0 },

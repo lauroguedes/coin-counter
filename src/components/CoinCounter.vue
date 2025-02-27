@@ -33,19 +33,17 @@ const resetCoin = (coin: Coin) => {
   <div class="container mx-auto p-4">
     <div class="flex flex-col gap-6">
       <!-- Header -->
-      <Transition name="fade-slow" mode="out-in">
-        <div :key="selectedCurrency.code" class="flex flex-col md:flex-row justify-between items-center gap-4">
-          <h2 class="text-2xl font-bold text-center md:text-left">
-            <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
-            {{ selectedCurrency.name }} Coin Counter
-          </h2>
-          <CurrencySelector
-            :currencies="currencies"
-            :selectedCurrency="selectedCurrency"
-            :onCurrencyChange="changeCurrency"
-          />
-        </div>
-      </Transition>
+      <div :key="selectedCurrency.code" class="flex bg-base-100 p-4 rounded-lg flex-col md:flex-row justify-between items-center gap-4">
+        <h2 class="text-2xl font-bold text-center md:text-left">
+          <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
+          {{ selectedCurrency.name }} Coin Counter
+        </h2>
+        <CurrencySelector
+          :currencies="currencies"
+          :selectedCurrency="selectedCurrency"
+          :onCurrencyChange="changeCurrency"
+        />
+      </div>
 
       <!-- Main Content -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

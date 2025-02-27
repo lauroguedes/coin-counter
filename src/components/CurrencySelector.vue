@@ -13,7 +13,7 @@ defineProps<{
     <button
       v-for="currency in currencies"
       :key="currency.code"
-      class="btn join-item"
+      class="btn btn-default join-item"
       :class="{ 'btn-active': selectedCurrency.code === currency.code }"
       @click="onCurrencyChange(currency)"
     >

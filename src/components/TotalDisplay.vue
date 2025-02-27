@@ -32,7 +32,7 @@ watch(() => props.totalValue, (newValue, oldValue) => {
 </script>
 
 <template>
-  <div class="card bg-base-200 shadow">
+  <div class="card bg-base-100 shadow">
     <div class="card-body p-4">
       <div class="flex items-center justify-between">
         <h3 class="card-title text-base">Total Value</h3>
