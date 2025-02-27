@@ -9,16 +9,73 @@ interface Coin {
   displayValue: number;
 }
 
-const coins = ref<Coin[]>([
-  { value: 200, label: '€2', count: 0, displayValue: 0 },
-  { value: 100, label: '€1', count: 0, displayValue: 0 },
-  { value: 50, label: '50c', count: 0, displayValue: 0 },
-  { value: 20, label: '20c', count: 0, displayValue: 0 },
-  { value: 10, label: '10c', count: 0, displayValue: 0 },
-  { value: 5, label: '5c', count: 0, displayValue: 0 },
-  { value: 2, label: '2c', count: 0, displayValue: 0 },
-  { value: 1, label: '1c', count: 0, displayValue: 0 }
-]);
+interface CurrencyConfig {
+  code: string;
+  symbol: string;
+  name: string;
+  coins: Coin[];
+}
+
+const currencies: CurrencyConfig[] = [
+  {
+    code: 'EUR',
+    symbol: '€',
+    name: 'Euro',
+    coins: [
+      { value: 200, label: '€2', count: 0, displayValue: 0 },
+      { value: 100, label: '€1', count: 0, displayValue: 0 },
+      { value: 50, label: '50c', count: 0, displayValue: 0 },
+      { value: 20, label: '20c', count: 0, displayValue: 0 },
+      { value: 10, label: '10c', count: 0, displayValue: 0 },
+      { value: 5, label: '5c', count: 0, displayValue: 0 },
+      { value: 2, label: '2c', count: 0, displayValue: 0 },
+      { value: 1, label: '1c', count: 0, displayValue: 0 }
+    ]
+  },
+  {
+    code: 'USD',
+    symbol: '$',
+    name: 'US Dollar',
+    coins: [
+      { value: 100, label: '$1', count: 0, displayValue: 0 },
+      { value: 50, label: '50¢', count: 0, displayValue: 0 },
+      { value: 25, label: '25¢', count: 0, displayValue: 0 },
+      { value: 10, label: '10¢', count: 0, displayValue: 0 },
+      { value: 5, label: '5¢', count: 0, displayValue: 0 },
+      { value: 1, label: '1¢', count: 0, displayValue: 0 }
+    ]
+  },
+  {
+    code: 'GBP',
+    symbol: '£',
+    name: 'British Pound',
+    coins: [
+      { value: 200, label: '£2', count: 0, displayValue: 0 },
+      { value: 100, label: '£1', count: 0, displayValue: 0 },
+      { value: 50, label: '50p', count: 0, displayValue: 0 },
+      { value: 20, label: '20p', count: 0, displayValue: 0 },
+      { value: 10, label: '10p', count: 0, displayValue: 0 },
+      { value: 5, label: '5p', count: 0, displayValue: 0 },
+      { value: 2, label: '2p', count: 0, displayValue: 0 },
+      { value: 1, label: '1p', count: 0, displayValue: 0 }
+    ]
+  },
+  {
+    code: 'BRL',
+    symbol: 'R$',
+    name: 'Brazilian Real',
+    coins: [
+      { value: 100, label: 'R$1', count: 0, displayValue: 0 },
+      { value: 50, label: '50c', count: 0, displayValue: 0 },
+      { value: 25, label: '25c', count: 0, displayValue: 0 },
+      { value: 10, label: '10c', count: 0, displayValue: 0 },
+      { value: 5, label: '5c', count: 0, displayValue: 0 }
+    ]
+  }
+];
+
+const selectedCurrency = ref<CurrencyConfig>(currencies[0]);
+const coins = ref<Coin[]>(selectedCurrency.value.coins);
 
 const totalDisplayValue = ref(0);
 
@@ -29,16 +86,20 @@ const totalValue = computed(() => {
 });
 
 const formattedTotal = computed(() => {
-  const euros = Math.floor(totalDisplayValue.value / 100);
-  const cents = totalDisplayValue.value % 100;
-  return `€${euros}.${cents.toString().padStart(2, '0')}`;
+  const value = totalDisplayValue.value / 100;
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: selectedCurrency.value.code
+  }).format(value);
 });
 
 const getIndividualSum = (coin: Coin) => {
   const totalCents = coin.value * coin.count;
-  const euros = Math.floor(totalCents / 100);
-  const cents = totalCents % 100;
-  return `€${euros}${cents > 0 ? `.${cents.toString().padStart(2, '0')}` : '.00'}`;
+  const value = totalCents / 100;
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: selectedCurrency.value.code
+  }).format(value);
 };
 
 const resetCounts = () => {
@@ -59,6 +120,12 @@ const decrement = (coin: Coin) => {
   if (coin.count > 0) {
     coin.count--;
   }
+};
+
+const changeCurrency = (currency: CurrencyConfig) => {
+  selectedCurrency.value = currency;
+  coins.value = currency.coins;
+  resetCounts();
 };
 
 // Watch for changes in the total value and animate accordingly
@@ -87,7 +154,20 @@ onMounted(() => {
   <div class="container mx-auto p-4">
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
-        <h2 class="card-title text-2xl font-bold text-center mb-6">Euro Coin Counter</h2>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+          <h2 class="card-title text-2xl font-bold text-center">{{ selectedCurrency.name }} Coin Counter</h2>
+          <div class="join">
+            <button
+              v-for="currency in currencies"
+              :key="currency.code"
+              class="btn join-item"
+              :class="{ 'btn-active': selectedCurrency.code === currency.code }"
+              @click="changeCurrency(currency)"
+            >
+              {{ currency.name }}
+            </button>
+          </div>
+        </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div v-for="coin in coins" :key="coin.label" class="flex items-center p-2 border rounded-lg">
