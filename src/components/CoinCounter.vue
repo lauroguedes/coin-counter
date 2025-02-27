@@ -47,36 +47,39 @@ const resetCoin = (coin: Coin) => {
           </div>
         </Transition>
         
-        <TransitionGroup 
-          name="fade-list" 
-          tag="div" 
-          class="grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
-          <CoinInput
-            v-for="(coin, index) in coins"
-            :key="coin.label"
-            :coin="coin"
-            :currencyCode="selectedCurrency.code"
-            :formatCurrency="formatCurrency"
-            :style="{ transitionDelay: `${index * 50}ms` }"
-            @increment="increment"
-            @decrement="decrement"
-            @reset="resetCoin"
-          />
-        </TransitionGroup>
-        
-        <div class="divider"></div>
-        
-        <div class="flex flex-col items-center justify-center">
-          <Transition name="fade-scale" mode="out-in">
-            <TotalDisplay
-              :key="selectedCurrency.code"
-              :totalValue="totalValue"
-              :formatCurrency="formatCurrency"
-            />
-          </Transition>
+        <div class="flex flex-col-reverse md:flex-row gap-6">
+          <div class="flex-1">
+            <TransitionGroup 
+              name="fade-list" 
+              tag="div" 
+              class="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              <CoinInput
+                v-for="(coin, index) in coins"
+                :key="coin.label"
+                :coin="coin"
+                :currencyCode="selectedCurrency.code"
+                :formatCurrency="formatCurrency"
+                :style="{ transitionDelay: `${index * 50}ms` }"
+                @increment="increment"
+                @decrement="decrement"
+                @reset="resetCoin"
+              />
+            </TransitionGroup>
+          </div>
           
-          <button class="btn btn-outline mt-4" @click="resetCounts">Reset All</button>
+          <div class="md:w-64 flex-shrink-0">
+            <div class="sticky top-4">
+              <Transition name="fade-scale" mode="out-in">
+                <TotalDisplay
+                  :key="selectedCurrency.code"
+                  :totalValue="totalValue"
+                  :formatCurrency="formatCurrency"
+                  @reset="resetCounts"
+                />
+              </Transition>
+            </div>
+          </div>
         </div>
       </div>
     </div>
