@@ -5,15 +5,24 @@ const currentYear = new Date().getFullYear();
 <template>
   <footer class="footer items-center p-4">
     <aside class="grid-flow-col items-center gap-4">
-      <!-- Coin Counter Logo -->
+      <!-- Money Hand Coins Logo -->
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
         width="36" 
         height="36" 
         viewBox="0 0 24 24" 
-        class="fill-current text-base-content"
+        fill="none" 
+        stroke="currentColor" 
+        stroke-width="2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        class="text-base-content"
       >
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+        <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/>
+        <path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/>
+        <path d="m2 16 6 6"/>
+        <circle cx="16" cy="9" r="2.9"/>
+        <circle cx="6" cy="5" r="3"/>
       </svg>
       <p class="text-base-content/70">Copyright © {{ currentYear }} - Created by <a href="https://lauroguedes.dev" target="_blank" rel="noopener noreferrer" class="link link-primary">Lauro Guedes</a></p>
     </aside>

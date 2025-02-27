@@ -90,6 +90,8 @@ const resetCoin = (coin: Coin) => {
       </div>
     </div>
 
+    <div class="divider"></div>
+
     <AppFooter />
   </div>
 </template>
