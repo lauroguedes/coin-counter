@@ -3,6 +3,8 @@ import { useCurrency, type Coin } from '../composables/useCurrency';
 import CurrencySelector from './CurrencySelector.vue';
 import CoinInput from './CoinInput.vue';
 import TotalDisplay from './TotalDisplay.vue';
+import AppLogo from './AppLogo.vue';
+import AppFooter from './AppFooter.vue';
 
 const {
   selectedCurrency,
@@ -30,59 +32,65 @@ const resetCoin = (coin: Coin) => {
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
-    <div class="flex flex-col gap-6">
-      <!-- Header -->
-      <div :key="selectedCurrency.code" class="flex bg-base-100 p-4 rounded-lg flex-col md:flex-row justify-between items-center gap-4">
-        <h2 class="text-2xl font-bold text-center md:text-left">
-          <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
-          {{ selectedCurrency.name }} Coin Counter
-        </h2>
-        <CurrencySelector
-          :currencies="currencies"
-          :selectedCurrency="selectedCurrency"
-          :onCurrencyChange="changeCurrency"
-        />
-      </div>
+  <div class="min-h-screen flex flex-col">
+    <div class="container mx-auto p-4 flex-1">
+      <div class="flex flex-col gap-6">
+        <AppLogo />
 
-      <!-- Main Content -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Coins Grid -->
-        <div class="lg:col-span-2">
-          <TransitionGroup 
-            name="fade-list" 
-            tag="div" 
-            class="grid grid-cols-1 md:grid-cols-2 gap-4"
-          >
-            <CoinInput
-              v-for="(coin, index) in coins"
-              :key="coin.label"
-              :coin="coin"
-              :currencyCode="selectedCurrency.code"
-              :formatCurrency="formatCurrency"
-              :style="{ transitionDelay: `${index * 50}ms` }"
-              @increment="increment"
-              @decrement="decrement"
-              @reset="resetCoin"
-            />
-          </TransitionGroup>
+        <!-- Header -->
+        <div :key="selectedCurrency.code" class="flex bg-base-100 p-4 rounded-lg flex-col md:flex-row justify-between items-center gap-4">
+          <h2 class="text-2xl font-bold text-center md:text-left">
+            <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
+            {{ selectedCurrency.name }} Coin Counter
+          </h2>
+          <CurrencySelector
+            :currencies="currencies"
+            :selectedCurrency="selectedCurrency"
+            :onCurrencyChange="changeCurrency"
+          />
         </div>
 
-        <!-- Total Display -->
-        <div class="lg:col-span-1">
-          <div class="sticky top-4">
-            <Transition name="fade-scale" mode="out-in">
-              <TotalDisplay
-                :key="selectedCurrency.code"
-                :totalValue="totalValue"
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Coins Grid -->
+          <div class="lg:col-span-2">
+            <TransitionGroup 
+              name="fade-list" 
+              tag="div" 
+              class="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              <CoinInput
+                v-for="(coin, index) in coins"
+                :key="coin.label"
+                :coin="coin"
+                :currencyCode="selectedCurrency.code"
                 :formatCurrency="formatCurrency"
-                @reset="resetCounts"
+                :style="{ transitionDelay: `${index * 50}ms` }"
+                @increment="increment"
+                @decrement="decrement"
+                @reset="resetCoin"
               />
-            </Transition>
+            </TransitionGroup>
+          </div>
+
+          <!-- Total Display -->
+          <div class="lg:col-span-1">
+            <div class="sticky top-4">
+              <Transition name="fade-scale" mode="out-in">
+                <TotalDisplay
+                  :key="selectedCurrency.code"
+                  :totalValue="totalValue"
+                  :formatCurrency="formatCurrency"
+                  @reset="resetCounts"
+                />
+              </Transition>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <AppFooter />
   </div>
 </template>
 
