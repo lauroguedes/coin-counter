@@ -5,6 +5,7 @@ import CoinInput from './CoinInput.vue';
 import TotalDisplay from './TotalDisplay.vue';
 import AppLogo from './AppLogo.vue';
 import AppFooter from './AppFooter.vue';
+import ThemeSwitch from './ThemeSwitch.vue';
 
 const {
   selectedCurrency,
@@ -39,10 +40,13 @@ const resetCoin = (coin: Coin) => {
 
         <!-- Header -->
         <div :key="selectedCurrency.code" class="flex bg-base-100 p-4 rounded-lg flex-col md:flex-row justify-between items-center gap-4">
-          <h2 class="text-2xl font-bold text-center md:text-left">
-            <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
-            {{ selectedCurrency.name }} Coin Counter
-          </h2>
+          <div class="flex items-center gap-4">
+            <h2 class="text-2xl font-bold text-center md:text-left">
+              <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
+              {{ selectedCurrency.name }} Coin Counter
+            </h2>
+            <ThemeSwitch />
+          </div>
           <CurrencySelector
             :currencies="currencies"
             :selectedCurrency="selectedCurrency"
