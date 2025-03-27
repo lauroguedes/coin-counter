@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useCurrency, type Coin } from '../composables/useCurrency';
+import { useCurrency, type Coin, type Banknote } from '../composables/useCurrency';
 import CurrencySelector from './CurrencySelector.vue';
 import CoinInput from './CoinInput.vue';
+import BanknoteInput from './BanknoteInput.vue';
 import TotalDisplay from './TotalDisplay.vue';
 import AppLogo from './AppLogo.vue';
 import AppFooter from './AppFooter.vue';
@@ -10,6 +11,7 @@ import ThemeSwitch from './ThemeSwitch.vue';
 const {
   selectedCurrency,
   coins,
+  banknotes,
   totalValue,
   currencies,
   formatCurrency,
@@ -30,6 +32,20 @@ const decrement = (coin: Coin) => {
 const resetCoin = (coin: Coin) => {
   coin.count = 0;
 };
+
+const incrementBanknote = (banknote: Banknote) => {
+  banknote.count++;
+};
+
+const decrementBanknote = (banknote: Banknote) => {
+  if (banknote.count > 0) {
+    banknote.count--;
+  }
+};
+
+const resetBanknote = (banknote: Banknote) => {
+  banknote.count = 0;
+};
 </script>
 
 <template>
@@ -43,7 +59,7 @@ const resetCoin = (coin: Coin) => {
           <div class="flex items-center gap-4">
             <h2 class="text-2xl font-bold text-center md:text-left">
               <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
-              {{ selectedCurrency.name }} Coin Counter
+              {{ selectedCurrency.name }} Money Counter
             </h2>
             <ThemeSwitch />
           </div>
@@ -56,25 +72,51 @@ const resetCoin = (coin: Coin) => {
 
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Coins Grid -->
+          <!-- Money Grid -->
           <div class="lg:col-span-2">
-            <TransitionGroup 
-              name="fade-list" 
-              tag="div" 
-              class="grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <CoinInput
-                v-for="(coin, index) in coins"
-                :key="coin.label"
-                :coin="coin"
-                :currencyCode="selectedCurrency.code"
-                :formatCurrency="formatCurrency"
-                :style="{ transitionDelay: `${index * 50}ms` }"
-                @increment="increment"
-                @decrement="decrement"
-                @reset="resetCoin"
-              />
-            </TransitionGroup>
+            <!-- Banknotes Section -->
+            <div class="mb-6">
+              <h3 class="text-xl font-semibold mb-4">Banknotes</h3>
+              <TransitionGroup 
+                name="fade-list" 
+                tag="div" 
+                class="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                <BanknoteInput
+                  v-for="(banknote, index) in banknotes"
+                  :key="banknote.label"
+                  :banknote="banknote"
+                  :currencyCode="selectedCurrency.code"
+                  :formatCurrency="formatCurrency"
+                  :style="{ transitionDelay: `${index * 50}ms` }"
+                  @increment="incrementBanknote"
+                  @decrement="decrementBanknote"
+                  @reset="resetBanknote"
+                />
+              </TransitionGroup>
+            </div>
+            
+            <!-- Coins Section -->
+            <div>
+              <h3 class="text-xl font-semibold mb-4">Coins</h3>
+              <TransitionGroup 
+                name="fade-list" 
+                tag="div" 
+                class="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                <CoinInput
+                  v-for="(coin, index) in coins"
+                  :key="coin.label"
+                  :coin="coin"
+                  :currencyCode="selectedCurrency.code"
+                  :formatCurrency="formatCurrency"
+                  :style="{ transitionDelay: `${index * 50}ms` }"
+                  @increment="increment"
+                  @decrement="decrement"
+                  @reset="resetCoin"
+                />
+              </TransitionGroup>
+            </div>
           </div>
 
           <!-- Total Display -->
