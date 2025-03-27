@@ -118,16 +118,20 @@ export function useCurrency() {
   const coins = ref<Coin[]>(selectedCurrency.value.coins);
   const banknotes = ref<Banknote[]>(selectedCurrency.value.banknotes);
 
-  const totalValue = computed(() => {
-    const coinsTotal = coins.value.reduce((total, coin) => {
+  const coinsTotal = computed(() => {
+    return coins.value.reduce((total, coin) => {
       return total + (coin.value * coin.count);
     }, 0);
-    
-    const banknotesTotal = banknotes.value.reduce((total, banknote) => {
+  });
+  
+  const banknotesTotal = computed(() => {
+    return banknotes.value.reduce((total, banknote) => {
       return total + (banknote.value * banknote.count);
     }, 0);
-    
-    return coinsTotal + banknotesTotal;
+  });
+  
+  const totalValue = computed(() => {
+    return coinsTotal.value + banknotesTotal.value;
   });
 
   const formatCurrency = (value: number) => {
@@ -158,6 +162,8 @@ export function useCurrency() {
     selectedCurrency,
     coins,
     banknotes,
+    coinsTotal,
+    banknotesTotal,
     totalValue,
     currencies,
     formatCurrency,

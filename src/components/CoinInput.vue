@@ -61,7 +61,7 @@ const formattedValue = computed(() => {
             min="0" 
             inputmode="numeric"
             pattern="[0-9]*"
-            class="input input-bordered join-item w-20 text-center text-lg"
+            class="input input-bordered join-item w-16 text-center"
           />
           <button 
             class="btn join-item" 
@@ -73,7 +73,7 @@ const formattedValue = computed(() => {
       </div>
 
       <!-- Value Display Row -->
-      <div class="flex justify-end mt-2">
+      <div class="flex justify-start mt-2">
         <CoinValueDisplay
           v-if="coin.count > 0"
           :value="formattedValue"
