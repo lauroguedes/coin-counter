@@ -1,15 +1,23 @@
 <script setup lang="ts">
-import { useCurrency, type Coin } from '../composables/useCurrency';
+import { useCurrency, type Coin, type Banknote } from '../composables/useCurrency';
 import CurrencySelector from './CurrencySelector.vue';
 import CoinInput from './CoinInput.vue';
+import BanknoteInput from './BanknoteInput.vue';
 import TotalDisplay from './TotalDisplay.vue';
 import AppLogo from './AppLogo.vue';
 import AppFooter from './AppFooter.vue';
 import ThemeSwitch from './ThemeSwitch.vue';
 
+import { ref } from 'vue';
+
+const activeTab = ref('banknotes');
+
 const {
   selectedCurrency,
   coins,
+  banknotes,
+  coinsTotal,
+  banknotesTotal,
   totalValue,
   currencies,
   formatCurrency,
@@ -30,6 +38,20 @@ const decrement = (coin: Coin) => {
 const resetCoin = (coin: Coin) => {
   coin.count = 0;
 };
+
+const incrementBanknote = (banknote: Banknote) => {
+  banknote.count++;
+};
+
+const decrementBanknote = (banknote: Banknote) => {
+  if (banknote.count > 0) {
+    banknote.count--;
+  }
+};
+
+const resetBanknote = (banknote: Banknote) => {
+  banknote.count = 0;
+};
 </script>
 
 <template>
@@ -43,7 +65,7 @@ const resetCoin = (coin: Coin) => {
           <div class="flex items-center gap-4">
             <h2 class="text-2xl font-bold text-center md:text-left">
               <span class="mr-2 text-2xl">{{ selectedCurrency.flag }}</span>
-              {{ selectedCurrency.name }} Coin Counter
+              {{ selectedCurrency.name }} Money Counter
             </h2>
             <ThemeSwitch />
           </div>
@@ -55,26 +77,71 @@ const resetCoin = (coin: Coin) => {
         </div>
 
         <!-- Main Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Coins Grid -->
-          <div class="lg:col-span-2">
-            <TransitionGroup 
-              name="fade-list" 
-              tag="div" 
-              class="grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <CoinInput
-                v-for="(coin, index) in coins"
-                :key="coin.label"
-                :coin="coin"
-                :currencyCode="selectedCurrency.code"
-                :formatCurrency="formatCurrency"
-                :style="{ transitionDelay: `${index * 50}ms` }"
-                @increment="increment"
-                @decrement="decrement"
-                @reset="resetCoin"
-              />
-            </TransitionGroup>
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <!-- Money Grid -->
+          <div class="lg:col-span-3">
+            <div class="tabs tabs-boxed mb-4">
+              <a 
+                class="tab transition-all duration-300 ease-in-out" 
+                :class="{ 'tab-active': activeTab === 'banknotes' }" 
+                @click="activeTab = 'banknotes'"
+              >
+                Banknotes
+              </a>
+              <a 
+                class="tab transition-all duration-300 ease-in-out" 
+                :class="{ 'tab-active': activeTab === 'coins' }" 
+                @click="activeTab = 'coins'"
+              >
+                Coins
+              </a>
+            </div>
+
+            <!-- Tab Panels with Transitions -->
+            <div class="relative pb-4" style="min-height: 500px; overflow-x: hidden;">
+                <!-- Tab Content with proper transitions -->
+                <Transition name="slide-fade" mode="out-in">
+                    <div v-if="activeTab === 'banknotes'" :key="'banknotes'" class="w-full">
+                        <div class="mb-4">
+                          <h3 class="text-xl font-semibold">Banknotes</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <BanknoteInput
+                            v-for="(banknote, index) in banknotes"
+                            :key="banknote.label"
+                            :banknote="banknote"
+                            :currencyCode="selectedCurrency.code"
+                            :formatCurrency="formatCurrency"
+                            :style="{ animationDelay: `${index * 30}ms` }"
+                            class="animate-fadeIn"
+                            @increment="incrementBanknote"
+                            @decrement="decrementBanknote"
+                            @reset="resetBanknote"
+                          />
+                        </div>
+                    </div>
+                    
+                    <div v-else-if="activeTab === 'coins'" :key="'coins'" class="w-full">
+                        <div class="mb-4">
+                          <h3 class="text-xl font-semibold">Coins</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <CoinInput
+                            v-for="(coin, index) in coins"
+                            :key="coin.label"
+                            :coin="coin"
+                            :currencyCode="selectedCurrency.code"
+                            :formatCurrency="formatCurrency"
+                            :style="{ animationDelay: `${index * 30}ms` }"
+                            class="animate-fadeIn"
+                            @increment="increment"
+                            @decrement="decrement"
+                            @reset="resetCoin"
+                          />
+                        </div>
+                    </div>
+                </Transition>
+            </div>
           </div>
 
           <!-- Total Display -->
@@ -84,6 +151,8 @@ const resetCoin = (coin: Coin) => {
                 <TotalDisplay
                   :key="selectedCurrency.code"
                   :totalValue="totalValue"
+                  :banknotesTotal="banknotesTotal"
+                  :coinsTotal="coinsTotal"
                   :formatCurrency="formatCurrency"
                   @reset="resetCounts"
                 />
@@ -112,29 +181,7 @@ const resetCoin = (coin: Coin) => {
   opacity: 0;
 }
 
-/* Staggered fade and slide for coin inputs */
-.fade-list-enter-active {
-  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.fade-list-leave-active {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  position: absolute;
-}
-
-.fade-list-enter-from {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
-}
-
-.fade-list-leave-to {
-  opacity: 0;
-  transform: translateY(-20px) scale(0.95);
-}
-
-.fade-list-move {
-  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+/* Removed old transition styles that are no longer used */
 
 /* Scale and fade for total display */
 .fade-scale-enter-active,
@@ -146,5 +193,32 @@ const resetCoin = (coin: Coin) => {
 .fade-scale-leave-to {
   opacity: 0;
   transform: scale(0.95);
+}
+
+/* Slide and fade for tab transitions - match the ease-in-out from tab buttons */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* Animation for staggered items */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out forwards;
+  opacity: 0;
 }
 </style>

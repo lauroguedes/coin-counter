@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { type Coin } from '../composables/useCurrency';
+import { type Banknote } from '../composables/useCurrency';
 import { computed } from 'vue';
 import CoinValueDisplay from './CoinValueDisplay.vue';
 
 const props = defineProps<{
-  coin: Coin;
+  banknote: Banknote;
   formatCurrency: (value: number) => string;
   currencyCode: string;
 }>();
 
 const emit = defineEmits<{
-  increment: [coin: Coin];
-  decrement: [coin: Coin];
-  reset: [coin: Coin];
+  increment: [banknote: Banknote];
+  decrement: [banknote: Banknote];
+  reset: [banknote: Banknote];
 }>();
 
-const coinColor = computed(() => {
-  // Color scheme based on currency type
+const banknoteColor = computed(() => {
+  // Color scheme based on currency type - use a different palette for banknotes
   const currencyColorMap: Record<string, string> = {
-    'EUR': 'bg-blue-500 hover:bg-blue-600', // Euro - Blue (EU flag color)
-    'USD': 'bg-red-500 hover:bg-red-600', // US Dollar - Red
-    'GBP': 'bg-purple-500 hover:bg-purple-600', // British Pound - Purple (royal color)
-    'BRL': 'bg-green-600 hover:bg-green-700', // Brazilian Real - Green (from flag)
+    'EUR': 'bg-indigo-600 hover:bg-indigo-700', // Euro - Indigo
+    'USD': 'bg-rose-600 hover:bg-rose-700', // US Dollar - Rose
+    'GBP': 'bg-violet-600 hover:bg-violet-700', // British Pound - Violet
+    'BRL': 'bg-emerald-600 hover:bg-emerald-700', // Brazilian Real - Emerald
   };
 
   return currencyColorMap[props.currencyCode] || 'bg-primary hover:bg-primary-focus';
 });
 
 const formattedValue = computed(() => {
-  return props.formatCurrency(props.coin.value * props.coin.count);
+  return props.formatCurrency(props.banknote.value * props.banknote.count);
 });
 </script>
 
@@ -37,27 +37,27 @@ const formattedValue = computed(() => {
     <div class="card-body p-4">
       <!-- Main Controls Row -->
       <div class="flex items-center gap-4">
-        <!-- Coin Circle -->
+        <!-- Banknote Rectangle -->
         <div 
           :class="[
-            'w-12 h-12 flex items-center justify-center text-white rounded-full transition-colors duration-200 shrink-0',
-            coinColor
+            'w-20 h-12 flex items-center justify-center text-white rounded-md transition-colors duration-200 shrink-0',
+            banknoteColor
           ]"
         >
-          <span class="text-lg font-bold">{{ coin.label }}</span>
+          <span class="text-lg font-bold">{{ banknote.label }}</span>
         </div>
 
         <!-- Controls -->
         <div class="join flex-1">
           <button 
             class="btn join-item" 
-            @click="emit('decrement', coin)"
+            @click="emit('decrement', banknote)"
           >
             -
           </button>
           <input 
             type="number" 
-            v-model="coin.count" 
+            v-model="banknote.count" 
             min="0" 
             inputmode="numeric"
             pattern="[0-9]*"
@@ -65,7 +65,7 @@ const formattedValue = computed(() => {
           />
           <button 
             class="btn join-item" 
-            @click="emit('increment', coin)"
+            @click="emit('increment', banknote)"
           >
             +
           </button>
@@ -75,10 +75,10 @@ const formattedValue = computed(() => {
       <!-- Value Display Row -->
       <div class="flex justify-start mt-2">
         <CoinValueDisplay
-          v-if="coin.count > 0"
+          v-if="banknote.count > 0"
           :value="formattedValue"
           :showReset="true"
-          @reset="emit('reset', coin)"
+          @reset="emit('reset', banknote)"
         />
       </div>
     </div>
@@ -100,4 +100,4 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-</style> 
+</style>
